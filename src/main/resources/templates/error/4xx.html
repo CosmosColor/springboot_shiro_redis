@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>404 Page</title>
+
+<div th:replace="common ::commonheader"></div>
+</head>
+
+<body class="error-page">
+
+<section>
+    <div class="container ">
+
+        <section class="error-wrapper text-center">
+            <h1><img alt="" src="images/404-error.png"></h1>
+            <h2 th:text="${status}">page not found</h2>
+            <h3 th:text="${message}">We Couldn’t Find This Page</h3>
+            <a class="back-btn" th:href="@{/main.html}"> Back To Home</a>
+        </section>
+
+    </div>
+</section>
+
+<div th:replace="common ::#commonscript"></div>
+
+<!--common scripts for all pages-->
+<!--<script src="js/scripts.js"></script>-->
+
+</body>
+</html>

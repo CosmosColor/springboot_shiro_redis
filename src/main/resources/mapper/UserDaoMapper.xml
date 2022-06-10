@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.han.shiro_spring_boot.mapper.UserMapper">
+    <insert id="save" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+        insert into inte.t_user
+        values (#{id}, #{username}, #{password}, #{salt});
+    </insert>
+    <insert id="addRoleforUserById">
+        insert into inte.t_user_role (userid,roleid)
+        values (#{userid}, #{roleid})
+    </insert>
+    <delete id="deleteUserById">
+        delete
+        from inte.t_user
+        where id = #{id}
+    </delete>
+    <delete id="deleteRoleByUserId">
+        delete from inte.t_user_role
+        where userid=#{id}
+    </delete>
+    <select id="findUserByName" resultType="user">
+        select *
+        from inte.t_user
+        where username = #{username}
+    </select>
+    <resultMap id="userMap" type="user">
+        <id column="uid" property="id"></id>
+        <result column="username" property="username"></result>
+        <result column="salt" property="salt"></result>
+        <collection property="roles" javaType="list" ofType="Role">
+            <id column="id" property="id"></id>
+            <result property="roleName" column="rname"></result>
+        </collection>
+    </resultMap>
+    <select id="findRolesByName" resultMap="userMap">
+        select u.id uid, u.username, u.salt, r.id, r.roleName rname
+        from inte.t_user u,
+             inte.t_role r,
+             inte.t_user_role ur
+        where u.id = ur.userid
+          and ur.roleid = r.id
+          and u.username = #{username}
+    </select>
+    <select id="findPermsByRoleId" resultType="perms">
+        SELECT p.id, p.name, p.url, r.roleName
+        FROM inte.t_role r
+                 LEFT JOIN inte.t_role_perms rp
+                           ON r.id = rp.roleid
+                 LEFT JOIN inte.t_perms p
+                           ON p.id = rp.permsid
+        WHERE r.id = #{id}
+    </select>
+    <resultMap id="getUsers" type="user">
+        <result property="id" column="id"></result>
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+        <result property="salt" column="salt"></result>
+        <collection property="roles" resultMap="getRoles" ofType="role" ></collection>
+    </resultMap>
+    <resultMap id="getRoles" type="role">
+        <result property="roleName" column="rolename"></result>
+        <collection property="perms" ofType="perms" >
+            <result property="name" column="pname"></result>
+            <result property="url" column="url"></result>
+        </collection>
+    </resultMap>
+    <select id="getUsers" resultMap="getUsers">
+        SELECT u.id id,u.username username, u.password `password`, u.salt salt, r.roleName rolename, p.name pname, p.url url
+        FROM inte.t_user u,
+             inte.t_role r,
+             inte.t_perms p,
+             inte.t_user_role ur,
+             inte.t_role_perms up
+        WHERE u.id = ur.userid
+          AND r.id = ur.roleid
+          AND r.id = up.roleid
+          AND p.id = up.permsid
+    </select>
+
+    <select id="getUsersSimple" resultType="user">
+        select * from inte.t_user
+    </select>
+    <select id="getRoles" resultType="role">
+        select * from inte.t_role
+    </select>
+    <select id="getUserCount" resultType="java.lang.Integer">
+        select count(*) from inte.t_user
+    </select>
+</mapper>

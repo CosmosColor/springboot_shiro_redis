@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <script type="text/javascript"
+            src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=Z6TIGYQTAamUlTHb7LcQdl6rWdmobaWY&ip=0.0.0.0/0&coor=bd09ll"></script>
+    <title>地图</title>
+    <style>
+
+        #container {
+            height: 700px;
+            width: 1200px;
+        }
+
+    </style>
+    <div th:include="common :: commonheader"></div>
+</head>
+
+<body class="sticky-header">
+
+
+    <!-- left side start-->
+    <div th:replace="common :: #leftmenu"></div>
+    <!-- left side end-->
+
+    <!-- main content start-->
+    <div class="main-content">
+
+        <!-- header section start-->
+        <div th:replace="common :: headermenu"></div>
+        <!-- header section end-->
+
+        <div id="container" tabindex="0" style="display: table">
+            <!--body wrapper end-->
+
+
+
+        </div>
+        <!-- main content end-->
+    </div>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<div th:replace="common :: #commonscript"></div>
+
+<!--common scripts for all pages-->
+<!--<script src="js/scripts.js"></script>-->
+<script>
+    var map = new BMapGL.Map("container");// 创建地图实例
+    var point = new BMapGL.Point(116.404, 39.915);// 创建点坐标
+    map.centerAndZoom(point, 15);// 初始化地图，设置中心点坐标和地图级别
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    var marker = new BMap.Marker(point);        // 创建标注
+    map.addOverlay(marker);// 将标注添加到地图
+
+    var one=document.getElementById("container")
+    one.onclick=function(){
+        one.focus()//没有效果，因为focus只对table标签有用，实现方案是将div标签添加table属性
+    }
+</script>
+
+
+</body>
+</html>
