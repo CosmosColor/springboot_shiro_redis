@@ -17,7 +17,7 @@ mysql 8.0.27
 admin账户
 admin 123
 product账户
-product角色可以进入管理用户界面，但是不可对用户进行修改
+product角色可以进入管理用户界面dynamic_table，但是不可对用户进行修改
 root 123456
 user账户
 无法进入相应管理界面，不具备任何权限
